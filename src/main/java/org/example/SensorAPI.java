@@ -1,5 +1,8 @@
 package org.example;
 
+import org.knowm.xchart.QuickChart;
+import org.knowm.xchart.SwingWrapper;
+import org.knowm.xchart.XYChart;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
@@ -11,7 +14,8 @@ public class SensorAPI {
 
     private static final DecimalFormat df = new DecimalFormat("0.00");
     public static Scanner scanner = new Scanner(System.in);
-    public static void main(String[] args) {
+
+    public static void main(String[] args) throws Exception {
         RestTemplate restTemplate = new RestTemplate();
         //registration(restTemplate);
         //sendMeasurement(restTemplate, new Sensor("Sensor5"));
@@ -21,10 +25,10 @@ public class SensorAPI {
         scanner.close();
     }
 
-    public static void taskTwoProject3APIClientSensor(RestTemplate restTemplate){
+    public static void taskTwoProject3APIClientSensor(RestTemplate restTemplate) {
         Sensor sensor = registration(restTemplate);
         for (int i = 0; i < 1000; i++) {
-            sendMeasurement(restTemplate,sensor);
+            sendMeasurement(restTemplate, sensor);
         }
         getMeasurements(restTemplate);
     }
@@ -57,7 +61,7 @@ public class SensorAPI {
     public static void sendMeasurement(RestTemplate restTemplate, Sensor sensor) {
         System.out.println("Отправка измерения от сенсора '" + sensor.getName() + "'");
         Measurement measurement = new Measurement();
-        Double value = Double.parseDouble(String.format(Locale.US,"%.2f",getValue()));
+        Double value = Double.parseDouble(String.format(Locale.US, "%.2f", getValue()));
         Boolean raining = getRaining();
         measurement.setValue(value);
         measurement.setRaining(raining);
@@ -78,10 +82,21 @@ public class SensorAPI {
                 restTemplate.exchange("http://localhost:8080/measurements",
                         HttpMethod.GET, null, new ParameterizedTypeReference<List<Measurement>>() {
                         });
-        for (Measurement m : rateResponse.getBody()
+        List<Measurement> measurements = rateResponse.getBody();
+        List<Double> temperature = new ArrayList<>();
+        List<Integer> numberMeasurement = new ArrayList<>();
+        int i = 0;
+        for (Measurement m : measurements
         ) {
+            temperature.add(m.getValue());
+            numberMeasurement.add(++i);
             System.out.println(m);
         }
+        // Create Chart
+        XYChart chart = QuickChart.getChart("Graph of Temperatures",
+                "Number of measurement","Temperature",  "Temperature/Number", numberMeasurement, temperature);
+        // Show it
+        new SwingWrapper(chart).displayChart();
     }
 
     public static void getSensors(RestTemplate restTemplate) {

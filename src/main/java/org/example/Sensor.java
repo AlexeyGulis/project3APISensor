@@ -1,6 +1,7 @@
 package org.example;
 
 import java.util.LinkedHashMap;
+
 public class Sensor {
     private String name;
 

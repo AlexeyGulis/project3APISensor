@@ -4,7 +4,6 @@ public class Measurement {
 
     private Double value;
     private Boolean raining;
-
     private Sensor sensor;
 
     public Measurement() {
