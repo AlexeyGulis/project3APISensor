@@ -3,7 +3,6 @@ package org.example;
 public class Measurement {
 
     private Double value;
-
     private Boolean raining;
 
     private Sensor sensor;
@@ -11,14 +10,16 @@ public class Measurement {
     public Measurement() {
     }
 
-    public Measurement(Double value, Boolean raining, Sensor sensor) {
-        this.value = value;
-        this.raining = raining;
-        this.sensor = sensor;
+    public Double getValue() {
+        return value;
     }
 
     public void setValue(Double value) {
         this.value = value;
+    }
+
+    public Boolean getRaining() {
+        return raining;
     }
 
     public void setRaining(Boolean raining) {
@@ -35,9 +36,8 @@ public class Measurement {
 
     @Override
     public String toString() {
-        return "Measurement " +
-                "value=" + value +
-                ", raining=" + raining +
-                ", sensor=" + sensor;
+        return "value = " + value +
+                ", raining = " + raining +
+                ", sensor = " + sensor;
     }
 }
